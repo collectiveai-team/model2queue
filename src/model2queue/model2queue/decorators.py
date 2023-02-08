@@ -1,8 +1,10 @@
 from threading import Thread
 
+import uvicorn
 from fastapi import FastAPI
 from kombu import Queue, Exchange, Producer, Connection
 
+from model2queue.helpers import run_in_main_loop
 from model2queue.workers import start_consumer_producer
 
 
@@ -39,7 +41,7 @@ def predict_from_queue(func, conn_url: str = "memory://localhost/"):
     model_input_reader.start()
 
 
-def enqueue_task(conn_url: str = "memory://localhost/"):
+def enqueue_task(func, conn_url: str = "memory://localhost/"):
     connection = Connection(conn_url)
     channel = connection.channel()
 
@@ -63,8 +65,9 @@ def enqueue_task(conn_url: str = "memory://localhost/"):
 
     @app.post("/task")
     async def create_item(task: dict) -> dict:
-
+        task = func(task)
         producer.publish(task)
         return {"status": "ok"}
 
-    app.run()
+    run_in_main_loop(uvicorn.run, app, host="0.0.0.0", port=8000)
+    # uvicorn.run(app, host="0.0.0.0", port=8000)
