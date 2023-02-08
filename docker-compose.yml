@@ -1,0 +1,58 @@
+version: '3.8'
+services:
+    model2queue-core:
+        image: ${CORE_IMAGE}
+        container_name: model2queue-core
+        build:
+            context: .
+            dockerfile: ./build/core/Dockerfile
+            args:
+                - PYTHON_VERSION=${PYTHON_VERSION}
+                - PIP_VERSION=${PIP_VERSION}
+                
+
+    model2queue-jupyter:
+        image: ${JUPYTER_IMAGE}
+        container_name: model2queue-jupyter
+        build:
+            context: .
+            dockerfile: ./build/jupyter/Dockerfile
+            args:
+                - CORE_IMAGE=${CORE_IMAGE}
+
+    model2queue-jupyter-gpu:
+        network_mode: host
+        image: ${JUPYTER_IMAGE}
+        container_name: model2queue-jupyter-gpu
+        deploy:
+            resources:
+                reservations:
+                    devices:
+                        - capabilities: [ gpu ]
+        shm_size: '8gb'
+        volumes:
+            - $PWD/${SRC_VOLUME_MOUNT}
+            - $PWD/${NOTEBOOKS_VOLUME_MOUNT}
+            - $PWD/${RESOURCES_VOLUME_MOUNT}
+        env_file:
+            - .env
+
+    model2queue-jupyter-cpu:
+        network_mode: host
+        image: ${JUPYTER_IMAGE}
+        container_name: model2queue-jupyter-cpu
+        shm_size: '8gb'
+        volumes:
+            - $PWD/${SRC_VOLUME_MOUNT}
+            - $PWD/${NOTEBOOKS_VOLUME_MOUNT}
+            - $PWD/${RESOURCES_VOLUME_MOUNT}
+        env_file:
+            - .env
+
+    model2queue-vastai:
+        image: ${VASTAI_IMAGE}
+        build:
+            context: .
+            dockerfile: ./build/vastai/Dockerfile
+            args:
+                - JUPYTER_IMAGE=${JUPYTER_IMAGE}
