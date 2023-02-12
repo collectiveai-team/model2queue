@@ -1,9 +1,11 @@
 from typing import Callable
 from threading import Thread
 
+import uvicorn
 from fastapi import FastAPI
 from kombu import Queue, Exchange, Producer, Connection
 
+from model2queue.helpers import run_in_main_loop
 from model2queue.workers import start_consumer_producer
 
 
@@ -68,4 +70,5 @@ def enqueue_task(func: Callable, conn_url: str = "memory://localhost/"):
         producer.publish(task)
         return {"status": "ok"}
 
-    app.run()
+    run_in_main_loop(uvicorn.run, app, host="0.0.0.0", port=8000)
+    # uvicorn.run(app, host="0.0.0.0", port=8000)
