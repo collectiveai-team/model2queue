@@ -1,20 +1,27 @@
-from typing import Callable
+from typing import Any, List, Callable
 
-from kombu import Queue, Exchange, Connection
 from kombu.mixins import ConsumerProducerMixin
+from kombu import Queue, Message, Consumer, Exchange, Connection
 
 
 class Worker(ConsumerProducerMixin):
-    def __init__(self, connection, queue, tgt_exchange, callback_function, routing_key):
+    def __init__(
+        self,
+        connection: Connection,
+        queue: str,
+        tgt_exchange: str,
+        callback_function: Callable,
+        routing_key: str,
+    ):
         self.connection = connection
         self.queue = queue
         self.tgt_exchange = tgt_exchange
         self.callback_function = callback_function
         self.routing_key = routing_key
 
-    def get_consumers(self, _Consumer, channel):
+    def get_consumers(self, consumer: Consumer, channel: Any) -> List[Consumer]:
         return [
-            _Consumer(
+            consumer(
                 queues=self.queue,
                 on_message=self.handle_message,
                 #  accept="text/plain",
@@ -22,7 +29,7 @@ class Worker(ConsumerProducerMixin):
             )
         ]
 
-    def handle_message(self, message):
+    def handle_message(self, message: Message) -> None:
         print(message)
         self.producer.publish(
             "hello to you",
