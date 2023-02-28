@@ -26,9 +26,7 @@ def preprocess_request(x: int) -> int:
 
 
 def process_request(x: int) -> str:
-    # dump image to disk
     return "ok"
-    # return "hello"
 
 
 app.post("/predict", dependencies=[Depends(preprocess_request)])(process_request)

@@ -3,7 +3,7 @@ from typing import Any, List, Callable
 from kombu.mixins import ConsumerProducerMixin
 from kombu import Queue, Message, Consumer, Exchange, Connection
 
-from model2queue.logger import get_logger
+from model2queue.helper.logger import get_logger
 
 logger = get_logger(__name__)
 

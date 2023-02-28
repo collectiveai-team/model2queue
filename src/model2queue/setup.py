@@ -8,8 +8,9 @@ setup(
     author="collective.ai",
     author_email="team.collective.ai@gmail.com",
     url="git repo url to clone it",
-    install_requires=["kombu", "fastapi", "uvicorn", "rich", "pytest==7.1.2"],
+    install_requires=["kombu", "fastapi", "uvicorn", "rich"],
     package_data={"": ["*.yml", "*.yaml"]},
     include_package_data=True,
     classifiers=["Programming Language :: Python :: 3"],
+    extras_require={"dev": ["pytest==7.1.2", "tensorflow", "python-multipart"]},
 )
