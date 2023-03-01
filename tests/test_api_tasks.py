@@ -11,7 +11,7 @@ def test_base_api_task_consumer():
         global result
         result = input
 
-    start_api_task_consumer(predict_input)
+    worker = start_api_task_consumer(predict_input)
 
     @api_task_producer()
     def produce(input: str) -> str:
@@ -22,6 +22,7 @@ def test_base_api_task_consumer():
         time.sleep(0.1)
 
     assert result == "input => hello"
+    worker.stop_consumer()
 
 
 def test_change_queue_api_task_consumer():
@@ -33,7 +34,7 @@ def test_change_queue_api_task_consumer():
         global result
         result = input
 
-    start_api_task_consumer(predict_input, in_queue_name=in_queue_name)
+    worker = start_api_task_consumer(predict_input, in_queue_name=in_queue_name)
 
     @api_task_producer(in_queue_name=in_queue_name)
     def produce(input: str) -> str:
@@ -44,3 +45,4 @@ def test_change_queue_api_task_consumer():
         time.sleep(0.1)
 
     assert result == "input => hello"
+    worker.stop_consumer()

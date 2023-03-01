@@ -1,13 +1,54 @@
 import functools
-from typing import Callable
-from threading import Thread
+from typing import Union, Callable
 
 from kombu import Queue, Exchange, Producer, Connection
 
 from model2queue.helper.logger import get_logger
-from model2queue.workers import start_consumer, start_consumer_producer
+from model2queue.workers import (
+    WorkerThread,
+    ConsumerTaskWorker,
+    ConsumerProducerTaskWorker,
+)
 
 logger = get_logger(__name__)
+
+
+def start_worker(worker: Union[ConsumerTaskWorker, ConsumerProducerTaskWorker]):
+    worker.run()
+
+
+def start_consumer_producer(
+    connection: Connection,
+    queue: Queue,
+    tgt_exchange: Exchange,
+    callback_function: Callable[[str], None],
+    routing_key: str,
+):
+    queue.maybe_bind(connection)
+    queue.declare()
+    worker = ConsumerProducerTaskWorker(
+        connection=connection,
+        queue=queue,
+        tgt_exchange=tgt_exchange,
+        callback_function=callback_function,
+        routing_key=routing_key,
+    )
+    worker.run()
+
+
+def start_consumer(
+    connection: Connection,
+    queue: Queue,
+    callback_function: Callable[[str], None],
+):
+    queue.maybe_bind(connection)
+    queue.declare()
+    worker = ConsumerTaskWorker(
+        connection=connection,
+        queue=queue,
+        callback_function=callback_function,
+    )
+    worker.run()
 
 
 def start_api_task_consumer_producer(
@@ -36,17 +77,23 @@ def start_api_task_consumer_producer(
     out_queue.maybe_bind(connection)
     out_queue.declare()
 
-    model_input_reader = Thread(
-        target=start_consumer_producer,
+    worker = ConsumerProducerTaskWorker(
+        connection=connection,
+        queue=in_queue,
+        tgt_exchange=out_exchange,
+        callback_function=func,
+        routing_key=out_routing_key,
+    )
+
+    model_input_reader = WorkerThread(
+        worker=worker,
+        target=start_worker,
         kwargs={
-            "connection": connection,
-            "queue": in_queue,
-            "tgt_exchange": out_exchange,
-            "callback_function": func,
-            "routing_key": "api_model_output",
+            "worker": worker,
         },
     )
     model_input_reader.start()
+    return model_input_reader
 
 
 def start_api_task_consumer(
@@ -63,15 +110,21 @@ def start_api_task_consumer(
     in_queue.maybe_bind(connection)
     in_queue.declare()
 
-    model_input_reader = Thread(
-        target=start_consumer,
+    worker = ConsumerTaskWorker(
+        connection=connection,
+        queue=in_queue,
+        callback_function=func,
+    )
+
+    model_input_reader = WorkerThread(
+        worker=worker,
+        target=start_worker,
         kwargs={
-            "connection": connection,
-            "queue": in_queue,
-            "callback_function": func,
+            "worker": worker,
         },
     )
     model_input_reader.start()
+    return model_input_reader
 
 
 def api_task_producer(
