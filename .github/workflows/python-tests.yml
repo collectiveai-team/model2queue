@@ -39,6 +39,7 @@ jobs:
       run: |
         python src/model2queue/setup.py sdist bdist_wheel
         pip install dist/model2queue-*.whl
+        pip install --no-deps src/model2queue
     - name: Test with pytest
       run: |
         pytest tests/
