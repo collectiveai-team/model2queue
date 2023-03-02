@@ -37,9 +37,9 @@ jobs:
         flake8 . --count --exit-zero --max-complexity=10 --max-line-length=127 --statistics
     - name: Install
       run: |
-        python src/model2queue/setup.py sdist bdist_wheel
+        cd src/model2queue
+        python setup.py sdist bdist_wheel
         pip install dist/model2queue-*.whl
-        pip install --no-deps src/model2queue
     - name: Test with pytest
       run: |
         pytest tests/
