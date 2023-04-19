@@ -30,4 +30,8 @@ class ConsumerTaskWorker(ConsumerProducerMixin):
 
     def handle_message(self, message: Message) -> None:
         logger.debug(f"received {message} from {self.queue}")
-        self.callback_function(message.payload)
+        try:
+            self.callback_function(message.payload)
+        except Exception as e:
+            logger.error(f"error {e} while processing message {message}")
+        message.ack()
