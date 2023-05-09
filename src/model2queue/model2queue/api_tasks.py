@@ -23,6 +23,7 @@ def start_consumer_producer(
     tgt_exchange: Exchange,
     callback_function: Callable[[str], None],
     routing_key: str,
+    n_workers: int
 ):
     queue.maybe_bind(connection)
     queue.declare()
@@ -32,6 +33,7 @@ def start_consumer_producer(
         tgt_exchange=tgt_exchange,
         callback_function=callback_function,
         routing_key=routing_key,
+        n_workers=n_workers
     )
     worker.run()
 
@@ -40,6 +42,7 @@ def start_consumer(
     connection: Connection,
     queue: Queue,
     callback_function: Callable[[str], None],
+    n_workers: int
 ):
     queue.maybe_bind(connection)
     queue.declare()
@@ -47,6 +50,7 @@ def start_consumer(
         connection=connection,
         queue=queue,
         callback_function=callback_function,
+        n_workers=n_workers
     )
     worker.run()
 

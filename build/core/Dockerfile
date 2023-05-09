@@ -6,14 +6,9 @@ ARG PYTHON_VERSION
 ARG PIP_VERSION
 # OS packages
 RUN sed -i 's/# deb-src/deb-src/' /etc/apt/sources.list \
-    && apt-get update --fix-missing
-
-RUN apt-get install -y --no-install-recommends \
-    software-properties-common \
-    && add-apt-repository ppa:deadsnakes/ppa
+    && apt-get update --fix-missing; exit 0
 
 # OS packages
-RUN apt-get update --fix-missing; exit 0
 RUN apt-get install -y --no-install-recommends \
     curl \
     wget \

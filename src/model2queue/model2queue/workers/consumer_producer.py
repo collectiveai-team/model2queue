@@ -16,12 +16,14 @@ class ConsumerProducerTaskWorker(ConsumerProducerMixin):
         tgt_exchange: str,
         callback_function: Callable,
         routing_key: str,
+        n_workers: int = 1
     ):
         self.connection = connection
         self.queue = queue
         self.tgt_exchange = tgt_exchange
         self.callback_function = callback_function
         self.routing_key = routing_key
+        self.n_workers = n_workers
 
     def get_consumers(self, consumer: Consumer, channel: Any) -> List[Consumer]:
         return [
@@ -30,6 +32,7 @@ class ConsumerProducerTaskWorker(ConsumerProducerMixin):
                 on_message=self.handle_message,
                 prefetch_count=10,
             )
+            for _ in self.n_workers
         ]
 
     def handle_message(self, message: Message) -> None:
