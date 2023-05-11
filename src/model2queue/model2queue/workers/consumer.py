@@ -14,7 +14,7 @@ class ConsumerTaskWorker(ConsumerProducerMixin):
         connection: Connection,
         queue: str,
         callback_function: Callable,
-        n_workers: int = 1,
+        n_workers: int,
     ):
         self.connection = connection
         self.queue = queue

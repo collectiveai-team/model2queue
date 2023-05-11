@@ -23,7 +23,7 @@ def start_consumer_producer(
     tgt_exchange: Exchange,
     callback_function: Callable[[str], None],
     routing_key: str,
-    n_workers: int
+    n_workers: int,
 ):
     queue.maybe_bind(connection)
     queue.declare()
@@ -33,7 +33,7 @@ def start_consumer_producer(
         tgt_exchange=tgt_exchange,
         callback_function=callback_function,
         routing_key=routing_key,
-        n_workers=n_workers
+        n_workers=n_workers,
     )
     worker.run()
 
@@ -42,7 +42,7 @@ def start_consumer(
     connection: Connection,
     queue: Queue,
     callback_function: Callable[[str], None],
-    n_workers: int
+    n_workers: int,
 ):
     queue.maybe_bind(connection)
     queue.declare()
@@ -50,7 +50,7 @@ def start_consumer(
         connection=connection,
         queue=queue,
         callback_function=callback_function,
-        n_workers=n_workers
+        n_workers=n_workers,
     )
     worker.run()
 
@@ -64,6 +64,7 @@ def start_api_task_consumer_producer(
     out_queue_name: str = "queue_in",
     out_exchange_name: str = "out_exchange",
     out_routing_key: str = "api_model_output",
+    n_workers: int = 1,
 ) -> None:
     connection = Connection(conn_url)
 
@@ -87,6 +88,7 @@ def start_api_task_consumer_producer(
         tgt_exchange=out_exchange,
         callback_function=func,
         routing_key=out_routing_key,
+        n_workers=n_workers,
     )
 
     model_input_reader = WorkerThread(
@@ -106,6 +108,7 @@ def start_api_task_consumer(
     in_queue_name: str = "queue_in",
     in_exchange_name: str = "in_excahnge",
     routing_key: str = "api_model_input",
+    n_workers: int = 1,
 ) -> None:
     connection = Connection(conn_url)
 
@@ -118,6 +121,7 @@ def start_api_task_consumer(
         connection=connection,
         queue=in_queue,
         callback_function=func,
+        n_workers=n_workers,
     )
 
     model_input_reader = WorkerThread(
