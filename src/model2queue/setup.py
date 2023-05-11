@@ -3,7 +3,7 @@ from setuptools import setup, find_packages
 setup(
     name="model2queue",
     packages=find_packages(),
-    version="0.1.3",
+    version="0.1.4.",
     description="A library to expose an api with a queue for batch predictions",
     author="collective.ai",
     author_email="team.collective.ai@gmail.com",

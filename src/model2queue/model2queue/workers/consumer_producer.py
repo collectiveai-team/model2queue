@@ -16,7 +16,7 @@ class ConsumerProducerTaskWorker(ConsumerProducerMixin):
         tgt_exchange: str,
         callback_function: Callable,
         routing_key: str,
-        n_workers: int = 1
+        n_workers: int = 1,
     ):
         self.connection = connection
         self.queue = queue
@@ -32,7 +32,7 @@ class ConsumerProducerTaskWorker(ConsumerProducerMixin):
                 on_message=self.handle_message,
                 prefetch_count=10,
             )
-            for _ in self.n_workers
+            for _ in range(self.n_workers)
         ]
 
     def handle_message(self, message: Message) -> None:
