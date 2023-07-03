@@ -30,7 +30,7 @@ class ConsumerProducerTaskWorker(ConsumerProducerMixin):
             consumer(
                 queues=self.queue,
                 on_message=self.handle_message,
-                prefetch_count=10,
+                prefetch_count=1,
             )
             for _ in range(self.n_workers)
         ]
