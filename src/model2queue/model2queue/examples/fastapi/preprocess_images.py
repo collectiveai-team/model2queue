@@ -34,4 +34,5 @@ async def create_file(file: UploadFile) -> dict:
 
 app.post("/predict", dependencies=[Depends(preprocess_request)])(create_file)
 
-start_api_task_consumer(predict_input)
+worker = start_api_task_consumer(predict_input)
+print(worker)

@@ -1,4 +1,3 @@
-# syntax=docker/dockerfile:1.3
 FROM model2queue-core:latest
 ENV EDITOR=vim
 

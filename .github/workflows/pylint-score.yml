@@ -1,0 +1,38 @@
+name: Pylint Score Report
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  pylint-score:
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v2
+
+    - name: Build and Run Devcontainer
+      run: |
+        # Build and start the container. Modify this command according to your setup.
+        docker build -t my-devcontainer ./devcontainer
+        docker run -d --name devcontainer my-devcontainer
+
+    - name: Execute Pylint
+      run: |
+        # Execute pylint inside the devcontainer and extract the score
+        SCORE=$(docker exec devcontainer pylint /workspace/src/model2queue/model2queue | grep 'Your code has been rated at' | awk '{print $7}')
+        echo "PYLINT_SCORE=$SCORE" >> $GITHUB_ENV
+
+    - name: Update README
+      run: |
+        # Use sed, awk, or a custom script to update the README with the pylint score
+        sed -i "s/PyLint Score:.*/PyLint Score: ${{ env.PYLINT_SCORE }}/" README.md
+        git config --local user.email "action@github.com"
+        git config --local user.name "GitHub Action"
+        git commit -am "Update PyLint Score"
+        git push
+

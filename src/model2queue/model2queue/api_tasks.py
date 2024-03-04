@@ -47,6 +47,7 @@ def start_api_task_consumer_producer(
         },
     )
     model_input_reader.start()
+    return model_input_reader.join()
 
 
 def start_api_task_consumer(
@@ -72,6 +73,7 @@ def start_api_task_consumer(
         },
     )
     model_input_reader.start()
+    return model_input_reader.join()
 
 
 def api_task_producer(

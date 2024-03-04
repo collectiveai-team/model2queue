@@ -86,6 +86,7 @@ def start_consumer_producer(
         routing_key=routing_key,
     )
     worker.run()
+    return worker
 
 
 def start_consumer(
@@ -101,3 +102,4 @@ def start_consumer(
         callback_function=callback_function,
     )
     worker.run()
+    return worker
