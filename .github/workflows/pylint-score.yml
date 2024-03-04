@@ -19,8 +19,8 @@ jobs:
       run: |
         # Build and start the container. Modify this command according to your setup.
         make core-build
-        docker build -t my-devcontainer .devcontainer/
-        docker run -d --name devcontainer my-devcontainer
+        docker compose -f .devcontainer/docker-compose.yml build
+        docker run -d --name devcontainer model2queue-devcontainer
 
     - name: Execute Pylint
       run: |
@@ -36,4 +36,3 @@ jobs:
         git config --local user.name "GitHub Action"
         git commit -am "Update PyLint Score"
         git push
-
