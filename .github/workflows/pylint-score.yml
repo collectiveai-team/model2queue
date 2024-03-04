@@ -18,7 +18,8 @@ jobs:
     - name: Build and Run Devcontainer
       run: |
         # Build and start the container. Modify this command according to your setup.
-        docker build -t my-devcontainer ./devcontainer
+        make core-build
+        docker build -t my-devcontainer .devcontainer/
         docker run -d --name devcontainer my-devcontainer
 
     - name: Execute Pylint
