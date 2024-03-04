@@ -3,8 +3,10 @@ import logging
 
 from rich.logging import RichHandler
 
+
 LOG_LEVEL = os.getenv("LOG_LEVEL", "info")
 LOG_LEVEL_MAP = {
+    "debug": logging.DEBUG,
     "info": logging.INFO,
     "warning": logging.WARNING,
     "error": logging.ERROR,

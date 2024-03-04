@@ -1,4 +1,4 @@
-FROM ubuntu:20.04
+FROM ubuntu:22.04
 ENV LANG=C.UTF-8 LC_ALL=C.UTF-8
 ENV DEBIAN_FRONTEND noninteractive
 
@@ -6,14 +6,9 @@ ARG PYTHON_VERSION
 ARG PIP_VERSION
 # OS packages
 RUN sed -i 's/# deb-src/deb-src/' /etc/apt/sources.list \
-    && apt-get update --fix-missing
-
-RUN apt-get install -y --no-install-recommends \
-    software-properties-common \
-    && add-apt-repository ppa:deadsnakes/ppa
+    && apt-get update --fix-missing; exit 0
 
 # OS packages
-RUN apt-get update --fix-missing; exit 0
 RUN apt-get install -y --no-install-recommends \
     curl \
     wget \
