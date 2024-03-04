@@ -43,19 +43,18 @@ WORKDIR /tmp
 RUN wget https://github.com/pypa/pip/archive/refs/tags/${PIP_VERSION}.zip --no-check-certificate \
     && unzip ${PIP_VERSION}.zip \
     && cd pip-${PIP_VERSION} \
-    && python setup.py install 
+    && python setup.py install
 
 # Install pytorch
 
 
-# Install model2queue 
-COPY ./src/model2queue  /tmp/model2queue 
+# Install model2queue
+COPY ./src/model2queue  /tmp/model2queue
 
 RUN --mount=type=cache,target=/root/.cache \
-    pip install --no-deps ./model2queue 
+    pip install ./model2queue
 
 # Clean
 RUN rm -rf /tmp/*
 
 WORKDIR /root
-
