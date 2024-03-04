@@ -25,7 +25,7 @@ jobs:
     - name: Execute Pylint
       run: |
         # Execute pylint inside the devcontainer and extract the score
-        SCORE=$(docker exec devcontainer pylint /workspace/src/model2queue/model2queue | grep 'Your code has been rated at' | awk '{print $7}')
+        SCORE=$(docker compose -f .devcontainer/docker-compose.yml run devcontainer pylint /workspace/src/model2queue/model2queue | grep 'Your code has been rated at' | awk '{print $7}')
         echo "PYLINT_SCORE=$SCORE" >> $GITHUB_ENV
 
     - name: Update README
