@@ -28,6 +28,11 @@ jobs:
         SCORE=$(docker compose -f .devcontainer/docker-compose.yml run devcontainer pylint /workspace/src/model2queue/model2queue | grep 'Your code has been rated at' | awk '{print $7}' | sed 's/\//\-/g')
         echo "PYLINT_SCORE=$SCORE" >> $GITHUB_ENV
 
+    - name: Configure Git
+      run: |
+        git config --global user.email "action@github.com"
+        git config --global user.name "GitHub Action"
+
     - name: Update README
       run: |
         # Use sed, awk, or a custom script to update the README with the pylint score
