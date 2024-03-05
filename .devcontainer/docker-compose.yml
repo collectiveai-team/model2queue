@@ -28,8 +28,6 @@ services:
             - ..:/workspace:cached
             - ../notebooks/:/notebooks
             - ../resources/:/resources
-            - $HOME/.ssh/:/home/vscode/.ssh
-            - $HOME/.gitconfig:/home/vscode/.gitconfig
         command: /bin/sh -c "while sleep 1000; do :; done"
 
     devcontainer:
@@ -49,6 +47,4 @@ services:
             - ..:/workspace:cached
             - ../notebooks/:/notebooks
             - ../resources/:/resources
-            - $HOME/.ssh/:/home/vscode/.ssh
-            - $HOME/.gitconfig:/home/vscode/.gitconfig
         command: /bin/sh -c "while sleep 1000; do :; done"
