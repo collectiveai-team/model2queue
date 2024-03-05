@@ -5,7 +5,7 @@ A library to expose an api with a queue for batch predictions
 
 The model2queue is a library designed to simplify the execution of heavy functions such as model predictions by queuing tasks in a queue. The library provides an easy-to-use API to queue tasks and define the function to consume a task item.
 
-![Pylint Score](https://img.shields.io/badge/Pylint%20Score-%2F10-red
+![Pylint Score](https://img.shields.io/badge/Pylint%20Score-%2F10-red)
 
 
 ## Installation
