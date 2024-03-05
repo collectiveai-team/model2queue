@@ -31,8 +31,8 @@ jobs:
     - name: Update PyLint Score in README
       run: |
         sed -i "s/PyLint Score:.*/PyLint Score: $PYLINT_SCORE/" README.md
-        git config user.email "action@github.com"
-        git config user.name "GitHub Action"
+        git config user.email action@github.com
+        git config user.name gitHub-action
         git add README.md
         git commit -m "Update PyLint Score" || echo "No changes to commit"
         git push
