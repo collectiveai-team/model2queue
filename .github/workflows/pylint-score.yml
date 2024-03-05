@@ -37,7 +37,5 @@ jobs:
       run: |
         # Use sed, awk, or a custom script to update the README with the pylint score
         sed -i "s/PyLint Score:.*/PyLint Score: ${{ env.PYLINT_SCORE }}/" README.md
-        git config --local user.email "action@github.com"
-        git config --local user.name "GitHub Action"
         git commit -am "Update PyLint Score"
         git push
